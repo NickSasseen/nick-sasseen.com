@@ -15,14 +15,20 @@ const TMDBApi = {
     "Authorization": `Bearer ${process.env.TMDB_API_KEY}`
   },
   GetBackdropImage: (path: string) => `${process.env.TMDB_IMG_BASE}/w1280${path}`,
-  GetPosterImage: (path: string) => `${process.env.TMDB_IMG_BASE}/w720${path}`,
+  GetPosterImage: (path: string) => `${process.env.TMDB_IMG_BASE}/w500${path}`,
   // endpoint lists
   MovieLists: {
     Popular: async (page: number = 1) => {
       const queryString = `page=${page}&language=en-US`;
-      return tmdbFetch<any>(`movie/popular?${queryString}`);
+      return tmdbFetch<PagedResponse<any>>(`movie/popular?${queryString}`);
     } 
   }, 
+  Trending: {
+    All: async (window: "day" | "week" = "day") => {
+      const queryString = `language=en-US`;
+      return tmdbFetch<PagedResponse<any>>(`trending/all/${window}?${queryString}`);
+    }
+  },
   TvSeriesLists: {
     Popular: async (page: number = 1) => {
       return await fetch(tmdbUrl("tv/popular"), {
@@ -32,10 +38,11 @@ const TMDBApi = {
   }, 
   // pseudo endpoints
   BothPopular: async (page: number = 1) => {
-    return await Promise.all([
+    const combined = await Promise.all([
       TMDBApi.MovieLists.Popular(page),
       TMDBApi.TvSeriesLists.Popular(page)
-    ])
+    ]);
+    return combined.flatMap((array) => array.results);
   }
 }
 
