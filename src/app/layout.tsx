@@ -149,7 +149,7 @@ const MobileToolbar = () => {
         <SheetContent side="left" className="max-w-xs flex flex-col">
           <nav className="flex flex-col space-y-4 text-lg font-medium">
             <Link
-              href="#"
+              href="/"
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full text-lg font-semibold text-primary-foreground md:text-base"
             >
               <img src="/favicon.ico" className="h-6" alt="site logo" />
