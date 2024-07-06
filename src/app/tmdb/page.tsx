@@ -114,7 +114,7 @@ const CarouselCard = ({ title, icon, pagedResults }) => {
         <Carousel>
           <CarouselContent>
             {pagedResults.results.map((item) => (
-              <CarouselItem key={item.id} className="basis-56">
+              <CarouselItem key={item.id} className="basis-44 sm:basis-56">
                 <Card>
                   <CardContent className="p-0">
                     <img
