@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/carousel";
 
 const TMDB = async () => {
+  const trending = await TMDBApi.Trending.All();
   const popular = await TMDBApi.MovieLists.Popular();
   const [topOne, ...theRest] = popular.results;
 
@@ -83,70 +84,37 @@ const TMDB = async () => {
       </section>
 
       <section>
-        <Trending />
+        <CarouselCard
+          title="Trending"
+          icon={<TrendingUp className="mr-2" />}
+          pagedResults={trending}
+        />
       </section>
       <section>
-        <Popular />
+        <CarouselCard
+          title="Popular"
+          icon={<Star className="mr-2" />}
+          pagedResults={popular}
+        />
       </section>
     </div>
   );
 };
 
-const Trending = async () => {
-  const trending = await TMDBApi.Trending.All();
-
+const CarouselCard = ({ title, icon, pagedResults }) => {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex">
-          <TrendingUp className="mr-2" />
-          Trending
+          {icon}
+          {title}
         </CardTitle>
       </CardHeader>
       <CardContent className="">
         <Carousel>
           <CarouselContent>
-            {trending.results.map((item) => (
-              <CarouselItem key={item.id} className="basis-1/2 sm:basis-1/3">
-                <Card>
-                  <CardContent className="p-0">
-                    <img
-                      className="rounded-t-lg"
-                      src={TMDBApi.GetPosterImage(item.poster_path)}
-                      alt={item.title ?? item.name}
-                    />
-                  </CardContent>
-                  <CardFooter className="p-2">
-                    {item.title ?? item.name}
-                  </CardFooter>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </CardContent>
-    </Card>
-  );
-};
-
-const Popular = async () => {
-  const x = await TMDBApi.BothPopular();
-  // combine them
-  console.log(x);
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex">
-          <Star className="mr-2" />
-          Popular
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="">
-        <Carousel>
-          <CarouselContent>
-            {x.map((item) => (
-              <CarouselItem key={item.id} className="basis-1/2 sm:basis-1/3">
+            {pagedResults.results.map((item) => (
+              <CarouselItem key={item.id} className="basis-56">
                 <Card>
                   <CardContent className="p-0">
                     <img
