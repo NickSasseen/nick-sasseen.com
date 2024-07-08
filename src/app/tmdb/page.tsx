@@ -19,6 +19,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import Link from "next/link";
 
 const TMDB = async () => {
   const trending = await TMDBApi.Trending.All();
@@ -54,7 +55,9 @@ const TMDB = async () => {
             </CardContent>
 
             <CardFooter className="justify-end p-0 pt-4">
-              <Button>See more</Button>
+              <Button asChild>
+                <Link href={`/tmdb/movie/${topOne.id}`}>See more</Link>
+              </Button>
             </CardFooter>
           </CardHeader>
         </Card>
@@ -115,18 +118,20 @@ const CarouselCard = ({ title, icon, pagedResults }) => {
           <CarouselContent>
             {pagedResults.results.map((item) => (
               <CarouselItem key={item.id} className="basis-44 sm:basis-56">
-                <Card>
-                  <CardContent className="p-0">
-                    <img
-                      className="rounded-t-lg"
-                      src={TMDBApi.GetPosterImage(item.poster_path)}
-                      alt={item.title ?? item.name}
-                    />
-                  </CardContent>
-                  <CardFooter className="p-2">
-                    {item.title ?? item.name}
-                  </CardFooter>
-                </Card>
+                <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
+                  <Card>
+                    <CardContent className="p-0">
+                      <img
+                        className="rounded-t-lg"
+                        src={TMDBApi.GetPosterImage(item.poster_path)}
+                        alt={item.title ?? item.name}
+                      />
+                    </CardContent>
+                    <CardFooter className="p-2">
+                      {item.title ?? item.name}
+                    </CardFooter>
+                  </Card>
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>

@@ -23,6 +23,14 @@ const TMDBApi = {
       return tmdbFetch<PagedResponse<any>>(`movie/popular?${queryString}`);
     } 
   }, 
+  Movies: {
+    Details: async (id: number) => {
+      const appends = [
+        ""
+      ].join(',')
+      return tmdbFetch<any>(`movie/${id}?append_to_response=${appends}&language=en-US`)
+    }
+  },
   Trending: {
     All: async (window: "day" | "week" = "day") => {
       const queryString = `language=en-US`;
