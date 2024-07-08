@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const TMDBLayout = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen mt-14 sm:mt-0">
+    <div className="flex flex-col min-h-screen">
       <div className="flex-1 p-2">{children}</div>
 
       <footer className="flex items-center justify-center border-t p-2 sm:py-4 space-x-4">
