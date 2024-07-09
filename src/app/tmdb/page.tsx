@@ -117,7 +117,7 @@ const CarouselCard = ({ title, icon, pagedResults }) => {
       <CardContent className="">
         <DaisyCarousel>
           {pagedResults.results.map((item) => (
-            <DaisyCarouselItem className="basis-36 sm:basis-56">
+            <DaisyCarouselItem key={item.id} className="basis-36 sm:basis-56">
               <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
                 <Card>
                   <CardContent className="p-0">
