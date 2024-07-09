@@ -1,17 +1,12 @@
 import { redirect } from "next/navigation";
 import React from "react";
 import TMDBApi from "../../api";
-import { Separator } from "@/components/ui/separator";
 import { getRuntime } from "../../utils";
 import { Button } from "@/components/ui/button";
 import { PlaySquareIcon } from "lucide-react";
 import Link from "next/link";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
 
 const Details = async ({ params: { slug, id } }) => {
   if (!["movie", "tv"].includes(slug)) {
@@ -73,29 +68,27 @@ const Details = async ({ params: { slug, id } }) => {
         <div className="divider divider-start text-xl font-bold">
           Top Billed Cast
         </div>
-        <Carousel>
-          <CarouselContent>
-            {cast
-              .filter((c) => !!c.profile_path)
-              .map((c) => (
-                <CarouselItem key={c.id} className="basis-44">
-                  <Card>
-                    <CardContent className="relative p-0">
-                      <img
-                        className="round-lg"
-                        src={TMDBApi.GetPosterImage(c.profile_path)}
-                      />
-                      <div className="absolute bottom-0 w-full px-2 pb-1 bg-white/80 text-slate-950 font-semibold">
-                        <span>{c.name}</span>
-                        <br />
-                        <span className="font-light">{c.character}</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              ))}
-          </CarouselContent>
-        </Carousel>
+        <DaisyCarousel>
+          {cast
+            .filter((c) => !!c.profile_path)
+            .map((c) => (
+              <DaisyCarouselItem key={c.id} className="basis-44">
+                <Card>
+                  <CardContent className="relative p-0">
+                    <img
+                      className="round-lg"
+                      src={TMDBApi.GetPosterImage(c.profile_path)}
+                    />
+                    <div className="absolute bottom-0 w-full px-2 pb-1 bg-white/80 text-slate-950 font-semibold">
+                      <span>{c.name}</span>
+                      <br />
+                      <span className="font-light">{c.character}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </DaisyCarouselItem>
+            ))}
+        </DaisyCarousel>
       </section>
 
       {belongs_to_collection && (

@@ -20,6 +20,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Link from "next/link";
+import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
 
 const TMDB = async () => {
   const trending = await TMDBApi.Trending.All();
@@ -114,28 +115,26 @@ const CarouselCard = ({ title, icon, pagedResults }) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="">
-        <Carousel>
-          <CarouselContent>
-            {pagedResults.results.map((item) => (
-              <CarouselItem key={item.id} className="basis-44 sm:basis-56">
-                <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
-                  <Card>
-                    <CardContent className="p-0">
-                      <img
-                        className="rounded-t-lg"
-                        src={TMDBApi.GetPosterImage(item.poster_path)}
-                        alt={item.title ?? item.name}
-                      />
-                    </CardContent>
-                    <CardFooter className="p-2">
-                      {item.title ?? item.name}
-                    </CardFooter>
-                  </Card>
-                </Link>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        <DaisyCarousel>
+          {pagedResults.results.map((item) => (
+            <DaisyCarouselItem className="basis-36 sm:basis-56">
+              <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
+                <Card>
+                  <CardContent className="p-0">
+                    <img
+                      className="rounded-t-lg"
+                      src={TMDBApi.GetPosterImage(item.poster_path)}
+                      alt={item.title ?? item.name}
+                    />
+                  </CardContent>
+                  <CardFooter className="p-2">
+                    {item.title ?? item.name}
+                  </CardFooter>
+                </Card>
+              </Link>
+            </DaisyCarouselItem>
+          ))}
+        </DaisyCarousel>
       </CardContent>
     </Card>
   );
