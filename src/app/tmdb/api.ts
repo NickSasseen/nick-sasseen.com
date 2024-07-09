@@ -26,7 +26,7 @@ const TMDBApi = {
   Movies: {
     Details: async (id: number) => {
       const appends = [
-        ""
+        "credits"
       ].join(',')
       return tmdbFetch<any>(`movie/${id}?append_to_response=${appends}&language=en-US`)
     }
