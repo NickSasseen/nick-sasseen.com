@@ -83,7 +83,7 @@ const Details = async ({ params: { slug, id } }) => {
             {cast
               .filter((c) => !!c.profile_path)
               .map((c) => (
-                <CarouselItem className="basis-44">
+                <CarouselItem key={c.id} className="basis-44">
                   <Card>
                     <CardContent className="relative p-0">
                       <img
@@ -119,7 +119,6 @@ const Details = async ({ params: { slug, id } }) => {
           </div>
         </section>
       )}
-      
     </main>
   );
 };
