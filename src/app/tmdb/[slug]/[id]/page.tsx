@@ -23,12 +23,7 @@ const Details = async ({ params: { slug, id } }) => {
 
   const {
     backdrop_path,
-    belongs_to_collection: {
-      id: collectionId,
-      name: collectionName,
-      poster_path: collectionPoster,
-      backdrop_path: collectionBackdrop,
-    },
+    belongs_to_collection,
     credits: { cast, crew },
     genres,
     poster_path,
@@ -103,15 +98,19 @@ const Details = async ({ params: { slug, id } }) => {
         </Carousel>
       </section>
 
-      {collectionId && (
+      {belongs_to_collection && (
         <section>
           <div className="relative">
-            <img src={TMDBApi.GetBackdropImage(collectionBackdrop)} />
+            <img
+              src={TMDBApi.GetBackdropImage(
+                belongs_to_collection.backdrop_path
+              )}
+            />
 
             <div className="absolute flex flex-col justify-center top-0 w-full h-full bg-slate-900/80 p-4">
               <div className="space-y-2">
                 <h2 className="font-bold text-2xl">
-                  Part of the {collectionName}
+                  Part of the {belongs_to_collection.name}
                 </h2>
                 <Button>View the collection</Button>
               </div>
