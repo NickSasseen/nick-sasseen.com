@@ -85,7 +85,11 @@ const TMDB = async () => {
       {[
         { title: "Trending", icon: <TrendingUp />, data: trending },
         { title: "Popular", icon: <Star />, data: popular },
-        { title: "Horror", icon: <Skull />, data: horrorMovies },
+        {
+          title: <h2 className="text-red-800">Horror</h2>,
+          icon: <Skull className="text-red-800" />,
+          data: horrorMovies,
+        },
       ].map(({ title, icon, data }, index) => (
         <section key={index}>
           <CarouselCard title={title} icon={icon} pagedResults={data} />
