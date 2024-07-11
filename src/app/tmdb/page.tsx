@@ -10,21 +10,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import { redirect } from "next/navigation";
-import { Search, Star, TrendingUp } from "lucide-react";
-import { log } from "console";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
+import { Search, Skull, Star, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
 
 const TMDB = async () => {
   const trending = await TMDBApi.Trending.All();
   const popular = await TMDBApi.MovieLists.Popular();
+  const horrorMovies = await TMDBApi.Discover.Movie({ with_genres: "27" });
   const [topOne, ...theRest] = popular.results;
 
   // server actions
@@ -101,11 +95,18 @@ const TMDB = async () => {
           pagedResults={popular}
         />
       </section>
+      <section>
+        <CarouselCard
+          title="Horror"
+          icon={<Skull className="mr-2" />}
+          pagedResults={horrorMovies}
+        />
+      </section>
     </div>
   );
 };
 
-const CarouselCard = ({ title, icon, pagedResults }) => {
+export const CarouselCard = ({ title, icon, pagedResults }) => {
   return (
     <Card>
       <CardHeader>
@@ -119,17 +120,17 @@ const CarouselCard = ({ title, icon, pagedResults }) => {
           {pagedResults.results.map((item) => (
             <DaisyCarouselItem key={item.id} className="basis-36 sm:basis-56">
               <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
-                <Card>
+                <Card className="rounded-lg">
                   <CardContent className="p-0">
                     <img
-                      className="rounded-t-lg"
+                      className="rounded-lg"
                       src={TMDBApi.GetPosterImage(item.poster_path)}
                       alt={item.title ?? item.name}
                     />
                   </CardContent>
-                  <CardFooter className="p-2">
+                  {/* <CardFooter className="p-2">
                     {item.title ?? item.name}
-                  </CardFooter>
+                  </CardFooter> */}
                 </Card>
               </Link>
             </DaisyCarouselItem>

@@ -3,10 +3,11 @@ import React from "react";
 import TMDBApi from "../../api";
 import { getRuntime } from "../../utils";
 import { Button } from "@/components/ui/button";
-import { PlaySquareIcon } from "lucide-react";
+import { LightbulbIcon, PlaySquareIcon } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
+import { CarouselCard } from "../../page";
 
 const Details = async ({ params: { slug, id } }) => {
   if (!["movie", "tv"].includes(slug)) {
@@ -25,6 +26,7 @@ const Details = async ({ params: { slug, id } }) => {
     title,
     name,
     overview,
+    recommendations,
     release_date,
     runtime,
     tagline,
@@ -109,6 +111,16 @@ const Details = async ({ params: { slug, id } }) => {
               </div>
             </div>
           </div>
+        </section>
+      )}
+
+      {recommendations && (
+        <section>
+          <CarouselCard
+            title="Recommendations"
+            icon={<LightbulbIcon className="mr-2" />}
+            pagedResults={recommendations}
+          />
         </section>
       )}
     </main>

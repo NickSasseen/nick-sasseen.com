@@ -17,6 +17,15 @@ const TMDBApi = {
   GetBackdropImage: (path: string) => `${process.env.TMDB_IMG_BASE}/w1280${path}`,
   GetPosterImage: (path: string) => `${process.env.TMDB_IMG_BASE}/w500${path}`,
   // endpoint lists
+  Discover: {
+    Movie: async (params) => {
+      const queryString = [
+        "language=en-US",
+        ...Object.keys(params).map((key, index, array) => `${key}=${params[key]}`)
+      ].join("&")
+      return tmdbFetch<PagedResponse<any>>(`discover/movie?${queryString}`);
+    }
+  },
   MovieLists: {
     Popular: async (page: number = 1) => {
       const queryString = `page=${page}&language=en-US`;
@@ -26,7 +35,8 @@ const TMDBApi = {
   Movies: {
     Details: async (id: number) => {
       const appends = [
-        "credits"
+        "credits", 
+        "recommendations"
       ].join(',')
       return tmdbFetch<any>(`movie/${id}?append_to_response=${appends}&language=en-US`)
     }
