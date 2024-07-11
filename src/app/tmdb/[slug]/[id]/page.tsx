@@ -68,7 +68,7 @@ const Details = async ({ params: { slug, id } }) => {
       <section className="sm:hidden">
         <InfoCard
           title={
-            <div className="flex w-full items-center justify-between">
+            <div className="flex w-full items-start justify-between">
               <h2 className="font-bold text-xl">
                 {title ?? name}
                 <span className="font-light ml-1">
@@ -76,7 +76,7 @@ const Details = async ({ params: { slug, id } }) => {
                 </span>
               </h2>
 
-              <span className="text-base">
+              <span className="text-base shrink-0">
                 {isMovie ? getRuntime(runtime) : `${number_of_seasons} seasons`}
               </span>
             </div>
