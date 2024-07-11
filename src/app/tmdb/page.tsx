@@ -14,6 +14,7 @@ import { redirect } from "next/navigation";
 import { Search, Skull, Star, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
+import InfoCard from "./components/info-card";
 
 const TMDB = async () => {
   const trending = await TMDBApi.Trending.All();
@@ -81,63 +82,40 @@ const TMDB = async () => {
         </Card>
       </section>
 
-      <section>
-        <CarouselCard
-          title="Trending"
-          icon={<TrendingUp className="mr-2" />}
-          pagedResults={trending}
-        />
-      </section>
-      <section>
-        <CarouselCard
-          title="Popular"
-          icon={<Star className="mr-2" />}
-          pagedResults={popular}
-        />
-      </section>
-      <section>
-        <CarouselCard
-          title="Horror"
-          icon={<Skull className="mr-2" />}
-          pagedResults={horrorMovies}
-        />
-      </section>
+      {[
+        { title: "Trending", icon: <TrendingUp />, data: trending },
+        { title: "Popular", icon: <Star />, data: popular },
+        { title: "Horror", icon: <Skull />, data: horrorMovies },
+      ].map(({ title, icon, data }) => (
+        <section>
+          <CarouselCard title={title} icon={icon} pagedResults={data} />
+        </section>
+      ))}
     </div>
   );
 };
 
 export const CarouselCard = ({ title, icon, pagedResults }) => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex">
-          {icon}
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="">
-        <DaisyCarousel>
-          {pagedResults.results.map((item) => (
-            <DaisyCarouselItem key={item.id} className="basis-36 sm:basis-56">
-              <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
-                <Card className="rounded-lg">
-                  <CardContent className="p-0">
-                    <img
-                      className="rounded-lg"
-                      src={TMDBApi.GetPosterImage(item.poster_path)}
-                      alt={item.title ?? item.name}
-                    />
-                  </CardContent>
-                  {/* <CardFooter className="p-2">
-                    {item.title ?? item.name}
-                  </CardFooter> */}
-                </Card>
-              </Link>
-            </DaisyCarouselItem>
-          ))}
-        </DaisyCarousel>
-      </CardContent>
-    </Card>
+    <InfoCard title={title} icon={icon}>
+      <DaisyCarousel>
+        {pagedResults.results.map((item) => (
+          <DaisyCarouselItem key={item.id} className="basis-36 sm:basis-56">
+            <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
+              <Card className="rounded-lg">
+                <CardContent className="p-0">
+                  <img
+                    className="rounded-lg"
+                    src={TMDBApi.GetPosterImage(item.poster_path)}
+                    alt={item.title ?? item.name}
+                  />
+                </CardContent>
+              </Card>
+            </Link>
+          </DaisyCarouselItem>
+        ))}
+      </DaisyCarousel>
+    </InfoCard>
   );
 };
 

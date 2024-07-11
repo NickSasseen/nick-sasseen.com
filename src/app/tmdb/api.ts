@@ -54,6 +54,15 @@ const TMDBApi = {
       }).then<PagedResponse<any>>(res => res.json());
     }
   }, 
+  TvSeries: {
+    Details: async (id: number) => {
+      const appends = [
+        "credits", 
+        "recommendations"
+      ].join(',');
+      return tmdbFetch<any>(`tv/${id}?append_to_response=${appends}&language=en-US`)
+    }
+  },
   // pseudo endpoints
   BothPopular: async (page: number = 1) => {
     const combined = await Promise.all([

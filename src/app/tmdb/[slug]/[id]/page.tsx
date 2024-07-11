@@ -3,36 +3,61 @@ import React from "react";
 import TMDBApi from "../../api";
 import { getRuntime } from "../../utils";
 import { Button } from "@/components/ui/button";
-import { LightbulbIcon, PlaySquareIcon } from "lucide-react";
-import Link from "next/link";
+import { Film, LightbulbIcon, Text, Tv, UsersIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
 import { CarouselCard } from "../../page";
+import InfoCard from "../../components/info-card";
 
 const Details = async ({ params: { slug, id } }) => {
-  if (!["movie", "tv"].includes(slug)) {
-    redirect("/not-found");
+  // build out type specific things
+  let details: any;
+  let isMovie: boolean;
+  let isTvSeries: boolean;
+  let castTitle: string;
+  switch (slug) {
+    case "movie":
+      details = await TMDBApi.Movies.Details(parseInt(id));
+      isMovie = true;
+      isTvSeries = false;
+      castTitle = "Top Billed Cast";
+      break;
+
+    case "tv":
+      details = await TMDBApi.TvSeries.Details(parseInt(id));
+      isMovie = false;
+      isTvSeries = true;
+      castTitle = "Series Cast";
+      break;
+
+    default:
+      redirect("/not-found");
   }
-  const isMovie = slug === "movie";
-  const details = isMovie ? await TMDBApi.Movies.Details(parseInt(id)) : null;
+
   console.log(details);
 
   const {
+    // common
     backdrop_path,
     belongs_to_collection,
     credits: { cast, crew },
     genres,
     poster_path,
     title,
-    name,
     overview,
     recommendations,
-    release_date,
     runtime,
     tagline,
+    // movie
+    release_date,
+    // tv
+    name,
+    first_air_date,
+    number_of_seasons,
   } = details;
-  const releaseYr = (release_date as string).split("-")[0];
-  // console.log(cast);
+
+  const releaseYr = (release_date as string)?.split("-")[0];
+  const firstAirYr = (first_air_date as string)?.split("-")[0];
 
   return (
     <main className="space-y-4">
@@ -40,69 +65,83 @@ const Details = async ({ params: { slug, id } }) => {
         <Hero backdropPath={backdrop_path} posterPath={poster_path} />
       </section>
 
-      <section className="sm:hidden space-y-3">
-        <h2 className="flex justify-center p-2 font-bold text-xl">
-          {title}
-          <span className="font-light ml-1">({releaseYr})</span>
-        </h2>
+      <section className="sm:hidden">
+        <InfoCard
+          title={
+            <div className="flex w-full items-center justify-between">
+              <h2 className="font-bold text-xl">
+                {title ?? name}
+                <span className="font-light ml-1">
+                  ({releaseYr ?? firstAirYr})
+                </span>
+              </h2>
 
-        <div className="flex flex-wrap justify-center">
-          <span>{release_date}</span>
-          <div className="w-px bg-white/50 mx-2" />
-          <span>{getRuntime(runtime)}</span>
-          <div className="w-px bg-white/50 mx-2" />
-          <Link href={""} className="flex item-center">
-            <PlaySquareIcon className="mr-2" size={20} />
-            <span>Play trailer</span>
-          </Link>
+              <span className="text-base">
+                {isMovie ? getRuntime(runtime) : `${number_of_seasons} seasons`}
+              </span>
+            </div>
+          }
+          icon={isMovie ? <Film /> : <Tv />}
+        >
+          <div className="flex flex-wrap">
+            {genres.map((genre) => (
+              <div className="flex-1 p-1">
+                <Button variant="outline" size="sm" className="w-full">
+                  {genre.name}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </InfoCard>
+      </section>
 
-          <p>{genres.map((genre) => genre.name).join(", ")}</p>
-        </div>
-
-        <div className="space-y-2">
-          <p className="font-light italic">{tagline}</p>
-          <h2 className="font-bold text-xl">Overview</h2>
-          <p>{overview}</p>
-        </div>
+      <section className="sm:hidden">
+        <InfoCard title="Overview" icon={<Text />}>
+          <div className="space-y-2">
+            <p className="font-light italic">{tagline}</p>
+            <p>{overview}</p>
+          </div>
+        </InfoCard>
       </section>
 
       <section>
-        <div className="divider divider-start text-xl font-bold">
-          Top Billed Cast
-        </div>
-        <DaisyCarousel>
-          {cast
-            .filter((c) => !!c.profile_path)
-            .map((c) => (
-              <DaisyCarouselItem key={c.id} className="basis-44">
-                <Card>
-                  <CardContent className="relative p-0">
-                    <img
-                      className="round-lg"
-                      src={TMDBApi.GetPosterImage(c.profile_path)}
-                    />
-                    <div className="absolute bottom-0 w-full px-2 pb-1 bg-white/80 text-slate-950 font-semibold">
-                      <span>{c.name}</span>
-                      <br />
-                      <span className="font-light">{c.character}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </DaisyCarouselItem>
-            ))}
-        </DaisyCarousel>
+        <InfoCard title={castTitle} icon={<UsersIcon />}>
+          <DaisyCarousel>
+            {cast
+              .filter((c) => !!c.profile_path)
+              .map((c) => (
+                <DaisyCarouselItem key={c.id} className="basis-44">
+                  <Card>
+                    <CardContent className="relative p-0">
+                      <img
+                        className="rounded-lg"
+                        src={TMDBApi.GetPosterImage(c.profile_path)}
+                      />
+                      <div className="absolute flex flex-wrap bottom-0 w-full px-2 pb-1 bg-gray-700/90 font-semibold rounded-b-lg">
+                        <span className="basis-full">{c.name}</span>
+                        <span className="font-light text-xs">
+                          {c.character}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </DaisyCarouselItem>
+              ))}
+          </DaisyCarousel>
+        </InfoCard>
       </section>
 
       {belongs_to_collection && (
         <section>
           <div className="relative">
             <img
+              className="rounded-lg"
               src={TMDBApi.GetBackdropImage(
                 belongs_to_collection.backdrop_path
               )}
             />
 
-            <div className="absolute flex flex-col justify-center top-0 w-full h-full bg-slate-900/80 p-4">
+            <div className="absolute flex flex-col justify-center top-0 w-full h-full bg-slate-900/80 p-4 rounded-lg">
               <div className="space-y-2">
                 <h2 className="font-bold text-2xl">
                   Part of the {belongs_to_collection.name}
