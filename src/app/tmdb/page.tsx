@@ -86,8 +86,8 @@ const TMDB = async () => {
         { title: "Trending", icon: <TrendingUp />, data: trending },
         { title: "Popular", icon: <Star />, data: popular },
         { title: "Horror", icon: <Skull />, data: horrorMovies },
-      ].map(({ title, icon, data }) => (
-        <section>
+      ].map(({ title, icon, data }, index) => (
+        <section key={index}>
           <CarouselCard title={title} icon={icon} pagedResults={data} />
         </section>
       ))}
@@ -95,7 +95,7 @@ const TMDB = async () => {
   );
 };
 
-export const CarouselCard = ({ title, icon, pagedResults }) => {
+const CarouselCard = ({ title, icon, pagedResults }) => {
   return (
     <InfoCard title={title} icon={icon}>
       <DaisyCarousel>

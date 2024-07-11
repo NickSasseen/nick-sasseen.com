@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Film, LightbulbIcon, Text, Tv, UsersIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
-import { CarouselCard } from "../../page";
 import InfoCard from "../../components/info-card";
+import Link from "next/link";
 
 const Details = async ({ params: { slug, id } }) => {
   // build out type specific things
@@ -85,7 +85,7 @@ const Details = async ({ params: { slug, id } }) => {
         >
           <div className="flex flex-wrap">
             {genres.map((genre) => (
-              <div className="flex-1 p-1">
+              <div key={genre.id} className="flex-1 p-1">
                 <Button variant="outline" size="sm" className="w-full">
                   {genre.name}
                 </Button>
@@ -184,6 +184,30 @@ const Hero = ({ backdropPath, posterPath }) => {
         <div className="flex-1"></div>
       </div>
     </figure>
+  );
+};
+
+const CarouselCard = ({ title, icon, pagedResults }) => {
+  return (
+    <InfoCard title={title} icon={icon}>
+      <DaisyCarousel>
+        {pagedResults.results.map((item) => (
+          <DaisyCarouselItem key={item.id} className="basis-36 sm:basis-6">
+            <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
+              <Card className="rounded-lg">
+                <CardContent className="p-0">
+                  <img
+                    className="rounded-lg"
+                    src={TMDBApi.GetPosterImage(item.poster_path)}
+                    alt={item.title ?? item.name}
+                  />
+                </CardContent>
+              </Card>
+            </Link>
+          </DaisyCarouselItem>
+        ))}
+      </DaisyCarousel>
+    </InfoCard>
   );
 };
 
