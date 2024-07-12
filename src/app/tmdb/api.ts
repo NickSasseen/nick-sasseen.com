@@ -41,6 +41,12 @@ const TMDBApi = {
       return tmdbFetch<any>(`movie/${id}?append_to_response=${appends}&language=en-US`)
     }
   },
+  Search: {
+    Multi: async (query: string, page: number = 1) => {
+      const queryString = `query=${query}&page=${page}&language=en-US`;
+      return tmdbFetch<PagedResponse<any>>(`search/multi?${queryString}`);
+    }
+  },
   Trending: {
     All: async (window: "day" | "week" = "day") => {
       const queryString = `language=en-US`;

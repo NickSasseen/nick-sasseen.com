@@ -1,14 +1,13 @@
 import React from "react";
+import SearchCard from "../components/search-card";
 
 const SearchPage = ({ searchParams }) => {
-  console.log(searchParams);
   const { q: query } = searchParams;
 
   return (
-    <div>
-      Search page
-      <p>searchTerm: {query}</p>
-    </div>
+    <>
+      <SearchCard term={query} typeAhead />
+    </>
   );
 };
 

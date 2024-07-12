@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { Heart, Home, LandPlotIcon, Tv } from "lucide-react";
 import MobileToolbar from "@/components/mobile-toolbar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,6 +56,7 @@ export default function RootLayout({
               {children}
             </div>
           </div>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

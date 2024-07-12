@@ -15,6 +15,7 @@ import { Search, Skull, Star, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
 import InfoCard from "./components/info-card";
+import SearchCard from "./components/search-card";
 
 const TMDB = async () => {
   const trending = await TMDBApi.Trending.All();
@@ -60,26 +61,7 @@ const TMDB = async () => {
       </section>
 
       <section>
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex">
-              <Search className="mr-2" />
-              Search
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form action={search}>
-              <div className="flex w-full items-center space-x-2">
-                <Input
-                  type="text"
-                  name="searchTerm"
-                  placeholder="Enter something"
-                />
-                <Button type="submit">Search</Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+        <SearchCard />
       </section>
 
       {[
