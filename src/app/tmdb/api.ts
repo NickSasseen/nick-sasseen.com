@@ -42,10 +42,18 @@ const TMDBApi = {
     }
   },
   Search: {
+    Movie: async (query: string, page: number = 1) => {
+      const queryString = `query=${query}&page=${page}&language=en-US`;
+      return tmdbFetch<PagedResponse<any>>(`search/movie?${queryString}`);
+    },
     Multi: async (query: string, page: number = 1) => {
       const queryString = `query=${query}&page=${page}&language=en-US`;
       return tmdbFetch<PagedResponse<any>>(`search/multi?${queryString}`);
-    }
+    },
+    Tv: async (query: string, page: number = 1) => {
+      const queryString = `query=${query}&page=${page}&language=en-US`;
+      return tmdbFetch<PagedResponse<any>>(`search/tv?${queryString}`);
+    },
   },
   Trending: {
     All: async (window: "day" | "week" = "day") => {

@@ -5,10 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { FormEvent, useEffect, useState } from "react";
-import z from "zod";
-import TMDBApi from "../api";
-import { PagedResponse } from "../models/paged-response";
+import React, { useState } from "react";
 
 type SearchCardProps = {
   term?: string;
