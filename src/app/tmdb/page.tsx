@@ -44,11 +44,7 @@ const TMDB = async () => {
               {topOne.overview}
             </CardDescription>
             <CardContent className="p-0">
-              <img
-                className="rounded-lg"
-                src={TMDBApi.GetBackdropImage(topOne.backdrop_path)}
-                alt={topOne.title}
-              />
+              <img className="rounded-lg" src={topOne.backdrop_path} alt={topOne.title} />
             </CardContent>
 
             <CardFooter className="justify-end p-0 pt-4">

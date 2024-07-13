@@ -169,17 +169,11 @@ const Details = async ({ params: { slug, id } }) => {
 const Hero = ({ backdropPath, posterPath }) => {
   return (
     <figure className="relative">
-      <img
-        className="w-full h-auto opacity-50"
-        src={TMDBApi.GetBackdropImage(backdropPath)}
-      />
+      <img className="w-full h-auto opacity-50" src={backdropPath} />
       {/* all the other info */}
       <div className="flex absolute w-full top-0 right-0 bottom-0">
         <div className="flex basis-1/3 items-center p-2">
-          <img
-            className="rounded-lg"
-            src={TMDBApi.GetPosterImage(posterPath)}
-          />
+          <img className="rounded-lg" src={posterPath} />
         </div>
         <div className="flex-1"></div>
       </div>
