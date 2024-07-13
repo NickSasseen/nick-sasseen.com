@@ -14,7 +14,7 @@ type TabResultsProps = {
 const TabResults = ({ results }: TabResultsProps) => {
   return (
     <Tabs className="w-full" defaultValue={results[0].value}>
-      <TabsList className={`flex flex-nowrap w-full justify-start overflow-scroll`}>
+      <TabsList className={`flex flex-nowrap w-full justify-start overflow-scroll mb-4`}>
         {results.map((result, index) => (
           <TabsTrigger key={index} value={result.value} className="basis-40 shrink-0 space-x-4">
             <span>{result.title}</span>
@@ -26,7 +26,7 @@ const TabResults = ({ results }: TabResultsProps) => {
       </TabsList>
 
       {results.map((result, index) => (
-        <TabsContent key={index} value={result.value} className="grid grid-cols-1 space-y-4 p-4">
+        <TabsContent key={index} value={result.value} className="space-y-4">
           {result.search.results.map((item) => {
             switch (result.value) {
               case "movie":
