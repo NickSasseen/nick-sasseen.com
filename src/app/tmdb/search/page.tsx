@@ -13,7 +13,7 @@ const SearchPage = async ({ searchParams }) => {
   ]);
 
   const results = [
-    { value: "movies", title: "Movies", search: movies },
+    { value: "movie", title: "Movies", search: movies },
     { value: "tv", title: "TV Shows", search: tv },
   ];
 
