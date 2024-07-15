@@ -3,29 +3,30 @@ import React from "react";
 import TMDBApi from "../../api";
 import { getRuntime } from "../../utils";
 import { Button } from "@/components/ui/button";
-import { Film, LightbulbIcon, Text, Tv, UsersIcon } from "lucide-react";
+import { Film, LibrarySquare, LightbulbIcon, Text, Tv, UsersIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
 import InfoCard from "../../components/info-card";
 import Link from "next/link";
+import { Dialog, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DialogContent } from "@radix-ui/react-dialog";
+import CollectionDialogButton from "../../components/collection-dialog-button";
 
 const Details = async ({ params: { slug, id } }) => {
   // build out type specific things
   let details: any;
-  let isMovie: boolean;
-  let isTvSeries: boolean;
+  let isMovie: boolean = false;
+  let isTvSeries: boolean = false;
   let castTitle: string;
   switch (slug) {
     case "movie":
       details = await TMDBApi.Movies.Details(parseInt(id));
       isMovie = true;
-      isTvSeries = false;
       castTitle = "Top Billed Cast";
       break;
 
     case "tv":
       details = await TMDBApi.TvSeries.Details(parseInt(id));
-      isMovie = false;
       isTvSeries = true;
       castTitle = "Series Cast";
       break;
@@ -40,8 +41,8 @@ const Details = async ({ params: { slug, id } }) => {
     // common
     backdrop_path,
     belongs_to_collection,
-    credits: { cast, crew },
-    genres,
+    credits: { cast, crew } = { cast: [], crew: [] },
+    genres = [],
     poster_path,
     title,
     overview,
@@ -69,19 +70,20 @@ const Details = async ({ params: { slug, id } }) => {
         <InfoCard
           title={
             <div className="flex w-full items-start justify-between">
-              <h2 className="font-bold text-xl">
+              <p className="font-bold text-xl">
                 {title ?? name}
-                <span className="font-light ml-1">
-                  ({releaseYr ?? firstAirYr})
-                </span>
-              </h2>
+                {(isMovie || isTvSeries) && (
+                  <span className="font-light ml-1">({releaseYr ?? firstAirYr})</span>
+                )}
+              </p>
 
               <span className="text-base shrink-0">
-                {isMovie ? getRuntime(runtime) : `${number_of_seasons} seasons`}
+                {isMovie && getRuntime(runtime)}
+                {isTvSeries && `${number_of_seasons} seasons`}
               </span>
             </div>
           }
-          icon={isMovie ? <Film /> : <Tv />}
+          icon={isMovie ? <Film /> : isTvSeries ? <Tv /> : <LibrarySquare />}
         >
           <div className="flex flex-wrap">
             {genres.map((genre) => (
@@ -113,15 +115,10 @@ const Details = async ({ params: { slug, id } }) => {
                 <DaisyCarouselItem key={c.id} className="basis-44">
                   <Card>
                     <CardContent className="relative p-0">
-                      <img
-                        className="rounded-lg"
-                        src={TMDBApi.GetPosterImage(c.profile_path)}
-                      />
+                      <img className="rounded-lg" src={TMDBApi.GetPosterImage(c.profile_path)} />
                       <div className="absolute flex flex-wrap bottom-0 w-full px-2 pb-1 bg-gray-700/90 font-semibold rounded-b-lg">
                         <span className="basis-full">{c.name}</span>
-                        <span className="font-light text-xs">
-                          {c.character}
-                        </span>
+                        <span className="font-light text-xs">{c.character}</span>
                       </div>
                     </CardContent>
                   </Card>
@@ -136,17 +133,13 @@ const Details = async ({ params: { slug, id } }) => {
           <div className="relative">
             <img
               className="rounded-lg"
-              src={TMDBApi.GetBackdropImage(
-                belongs_to_collection.backdrop_path
-              )}
+              src={TMDBApi.GetBackdropImage(belongs_to_collection.backdrop_path)}
             />
 
             <div className="absolute flex flex-col justify-center top-0 w-full h-full bg-slate-900/80 p-4 rounded-lg">
               <div className="space-y-2">
-                <h2 className="font-bold text-2xl">
-                  Part of the {belongs_to_collection.name}
-                </h2>
-                <Button>View the collection</Button>
+                <h2 className="font-bold text-2xl">Part of the {belongs_to_collection.name}</h2>
+                <CollectionDialogButton collectionId={belongs_to_collection.id} />
               </div>
             </div>
           </div>

@@ -1,6 +1,10 @@
 import { PagedResponse } from "./models/paged-response";
 
-const tmdbUrl = (url: string): string => [process.env.TMDB_URL_BASE, url].join("/");
+const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const TMDB_URL_BASE = "https://api.themoviedb.org/3";
+const TMDB_IMG_BASE = "https://image.tmdb.org/t/p";
+
+const tmdbUrl = (url: string): string => [TMDB_URL_BASE, url].join("/");
 
 const transformImagePaths = (result) => {
   if (Array.isArray(result.results)) {
@@ -40,11 +44,16 @@ const TMDBApi = {
   // helpers
   Headers: {
     Accept: "application/json",
-    Authorization: `Bearer ${process.env.TMDB_API_KEY}`,
+    Authorization: `Bearer ${TMDB_API_KEY}`,
   },
-  GetBackdropImage: (path: string) => `${process.env.TMDB_IMG_BASE}/w1280${path}`,
-  GetPosterImage: (path: string) => `${process.env.TMDB_IMG_BASE}/w500${path}`,
+  GetBackdropImage: (path: string) => `${TMDB_IMG_BASE}/w1280${path}`,
+  GetPosterImage: (path: string) => `${TMDB_IMG_BASE}/w500${path}`,
   // endpoint lists
+  Collections: {
+    Details: async (id: number) => {
+      return tmdbFetch<any>(`collection/${id}?language=en-US`);
+    },
+  },
   Discover: {
     Movie: async (params) => {
       const queryString = [
