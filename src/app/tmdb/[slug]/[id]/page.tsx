@@ -11,6 +11,23 @@ import Link from "next/link";
 import { Dialog, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DialogContent } from "@radix-ui/react-dialog";
 import CollectionDialogButton from "../../components/collection-dialog-button";
+import { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata({ params }, parent: ResolvingMetadata): Promise<Metadata> {
+  // read route params
+  const { slug, id } = params;
+
+  // fetch data
+  const item =
+    slug === "movie"
+      ? await TMDBApi.Movies.Details(parseInt(id))
+      : await TMDBApi.TvSeries.Details(parseInt(id));
+  const title = item.name ?? item.title;
+
+  return {
+    title,
+  };
+}
 
 const Details = async ({ params: { slug, id } }) => {
   // build out type specific things
