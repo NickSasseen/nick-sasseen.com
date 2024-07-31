@@ -4,7 +4,7 @@ import { menuItems } from "@/app/layout";
 import { PanelLeft, Heart } from "lucide-react";
 import { SheetTrigger, SheetContent, Sheet } from "./ui/sheet";
 import { Button } from "./ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -67,6 +67,47 @@ const MobileToolbar = () => {
 };
 
 const HeartDialogButton = () => {
+  const vacationDate = new Date("2024-09-19");
+  const [timeRemaining, setTimeRemaining] = useState({
+    months: 0,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const now = new Date();
+      const totalSeconds = Math.max((vacationDate.getTime() - now.getTime()) / 1000, 0);
+
+      const months = Math.floor(totalSeconds / (60 * 60 * 24 * 30));
+      const days = Math.floor((totalSeconds % (60 * 60 * 24 * 30)) / (60 * 60 * 24));
+      const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+      const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+
+      setTimeRemaining({
+        months,
+        days,
+        hours,
+        minutes,
+        seconds,
+      });
+    };
+
+    const timer = setInterval(calculateTimeRemaining, 1000);
+
+    return () => clearInterval(timer); // Cleanup timer on component unmount
+  }, [vacationDate]);
+
+  const getValueStyle = (val) => {
+    const customStyle: React.CSSProperties & { [key: `--${string}`]: string | number } = {
+      "--value": val, // Custom property
+    };
+    return customStyle;
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -75,16 +116,45 @@ const HeartDialogButton = () => {
           Lindsy
         </Button>
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Share link</DialogTitle>
-          <DialogDescription>
-            Anyone who has this link will be able to view this.
-          </DialogDescription>
+          <DialogTitle>Countdown to Vacation</DialogTitle>
         </DialogHeader>
-        <div className="flex items-center space-x-2">
-          <div className="grid flex-1 gap-2"></div>
+
+        <div className="grid grid-cols-5 grid-flow-col gap-1 text-center">
+          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+            <span className="countdown font-mono text-5xl">
+              <span style={getValueStyle(timeRemaining.months)}></span>
+            </span>
+            months
+          </div>
+          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+            <span className="countdown font-mono text-5xl">
+              <span style={getValueStyle(timeRemaining.days)}></span>
+            </span>
+            days
+          </div>
+          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+            <span className="countdown font-mono text-5xl">
+              <span style={getValueStyle(timeRemaining.hours)}></span>
+            </span>
+            hours
+          </div>
+          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+            <span className="countdown font-mono text-5xl">
+              <span style={getValueStyle(timeRemaining.minutes)}></span>
+            </span>
+            min
+          </div>
+          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+            <span className="countdown font-mono text-5xl">
+              <span style={getValueStyle(timeRemaining.seconds)}></span>
+            </span>
+            sec
+          </div>
         </div>
+
         <DialogFooter className="justify-start">
           <DialogClose asChild>
             <Button type="button" variant="secondary">
