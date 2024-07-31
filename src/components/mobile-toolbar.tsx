@@ -22,14 +22,9 @@ const MobileToolbar = () => {
   const closeSheet = () => setOpen(false);
   return (
     <div className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:hidden">
-      <Sheet open={open}>
+      <Sheet>
         <SheetTrigger asChild>
-          <Button
-            size="icon"
-            variant="outline"
-            className="sm:hidden"
-            onClick={() => setOpen(true)}
-          >
+          <Button size="icon" variant="outline" className="sm:hidden" onClick={() => setOpen(true)}>
             <PanelLeft className="h-5 w-5" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
