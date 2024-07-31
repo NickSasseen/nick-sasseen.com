@@ -12,6 +12,7 @@ import { Dialog, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DialogContent } from "@radix-ui/react-dialog";
 import CollectionDialogButton from "../../components/collection-dialog-button";
 import { Metadata, ResolvingMetadata } from "next";
+import CastMemberDialogCard from "../../components/cast-member-dialog-card";
 
 export async function generateMetadata({ params }, parent: ResolvingMetadata): Promise<Metadata> {
   // read route params
@@ -52,8 +53,6 @@ const Details = async ({ params: { slug, id } }) => {
       redirect("/not-found");
   }
 
-  console.log(details);
-
   const {
     // common
     backdrop_path,
@@ -73,6 +72,7 @@ const Details = async ({ params: { slug, id } }) => {
     first_air_date,
     number_of_seasons,
   } = details;
+  console.log(cast);
 
   const releaseYr = (release_date as string)?.split("-")[0];
   const firstAirYr = (first_air_date as string)?.split("-")[0];
@@ -130,15 +130,7 @@ const Details = async ({ params: { slug, id } }) => {
               .filter((c) => !!c.profile_path)
               .map((c) => (
                 <DaisyCarouselItem key={c.id} className="basis-44">
-                  <Card>
-                    <CardContent className="relative p-0">
-                      <img className="rounded-lg" src={TMDBApi.GetPosterImage(c.profile_path)} />
-                      <div className="absolute flex flex-wrap bottom-0 w-full px-2 pb-1 bg-gray-700/90 font-semibold rounded-b-lg">
-                        <span className="basis-full">{c.name}</span>
-                        <span className="font-light text-xs">{c.character}</span>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <CastMemberDialogCard id={c.id} name={c.name} character={c.character} />
                 </DaisyCarouselItem>
               ))}
           </DaisyCarousel>

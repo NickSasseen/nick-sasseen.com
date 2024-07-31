@@ -7,27 +7,38 @@ const TMDB_IMG_BASE = "https://image.tmdb.org/t/p";
 const tmdbUrl = (url: string): string => [TMDB_URL_BASE, url].join("/");
 
 const transformImagePaths = (result) => {
-  if (Array.isArray(result.results)) {
-    result.results.forEach((obj) => {
-      // Check if 'poster_path' property exists and alter it if needed
-      if (obj.poster_path) {
-        obj.poster_path = TMDBApi.GetPosterImage(obj.poster_path);
-      }
+  const transformObject = (obj) => {
+    // Check if 'poster_path' property exists and alter it if needed
+    if (obj.poster_path) {
+      obj.poster_path = TMDBApi.GetPosterImage(obj.poster_path);
+    }
+    if (obj.profile_path) {
+      obj.profile_path = TMDBApi.GetPosterImage(obj.profile_path);
+    }
 
-      if (obj.backdrop_path) {
-        // Example transformation: prepend base URL to poster_path
-        obj.backdrop_path = TMDBApi.GetBackdropImage(obj.backdrop_path);
+    // Check if 'backdrop_path' property exists and alter it if needed
+    if (obj.backdrop_path) {
+      obj.backdrop_path = TMDBApi.GetBackdropImage(obj.backdrop_path);
+    }
+
+    // Recursively transform nested objects or arrays
+    for (const key in obj) {
+      if (obj[key] !== null && typeof obj[key] === "object") {
+        if (Array.isArray(obj[key])) {
+          obj[key].forEach((item) => transformObject(item));
+        } else {
+          transformObject(obj[key]);
+        }
       }
-    });
+    }
+  };
+
+  // Handle array of objects
+  if (Array.isArray(result.results)) {
+    result.results.forEach(transformObject);
   } else {
-    // Handle single object case if needed
-    if (result.poster_path) {
-      // Example transformation: prepend base URL to poster_path
-      result.poster_path = TMDBApi.GetPosterImage(result.poster_path);
-    }
-    if (result.backdrop_path) {
-      result.backdrop_path = TMDBApi.GetBackdropImage(result.backdrop_path);
-    }
+    // Handle single object case
+    transformObject(result);
   }
 };
 
@@ -54,6 +65,11 @@ const TMDBApi = {
       return tmdbFetch<any>(`collection/${id}?language=en-US`);
     },
   },
+  Credits: {
+    Details: async (id: number) => {
+      return tmdbFetch<any>(`credit/${id}`);
+    },
+  },
   Discover: {
     Movie: async (params) => {
       const queryString = [
@@ -73,6 +89,12 @@ const TMDBApi = {
     Details: async (id: number) => {
       const appends = ["credits", "recommendations"].join(",");
       return tmdbFetch<any>(`movie/${id}?append_to_response=${appends}&language=en-US`);
+    },
+  },
+  People: {
+    Details: async (id: number) => {
+      const appends = ["movie_credits", "tv_credits"].join(",");
+      return tmdbFetch<any>(`person/${id}?append_to_response=${appends}&language=en-US`);
     },
   },
   Search: {
