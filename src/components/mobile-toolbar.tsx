@@ -123,36 +123,23 @@ const HeartDialogButton = () => {
         </DialogHeader>
 
         <div className="grid grid-cols-5 grid-flow-col gap-1 text-center">
-          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-            <span className="countdown font-mono text-5xl">
-              <span style={getValueStyle(timeRemaining.months)}></span>
-            </span>
-            months
-          </div>
-          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-            <span className="countdown font-mono text-5xl">
-              <span style={getValueStyle(timeRemaining.days)}></span>
-            </span>
-            days
-          </div>
-          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-            <span className="countdown font-mono text-5xl">
-              <span style={getValueStyle(timeRemaining.hours)}></span>
-            </span>
-            hours
-          </div>
-          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-            <span className="countdown font-mono text-5xl">
-              <span style={getValueStyle(timeRemaining.minutes)}></span>
-            </span>
-            min
-          </div>
-          <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-            <span className="countdown font-mono text-5xl">
-              <span style={getValueStyle(timeRemaining.seconds)}></span>
-            </span>
-            sec
-          </div>
+          {[
+            { label: "months", val: timeRemaining.months },
+            { label: "days", val: timeRemaining.days },
+            { label: "hours", val: timeRemaining.hours },
+            { label: "mins", val: timeRemaining.minutes },
+            { label: "sec", val: timeRemaining.seconds },
+          ].map((item) => (
+            <div
+              key={item.val}
+              className="flex flex-col items-center text-sm p-2 bg-neutral rounded-box text-neutral-content"
+            >
+              <span className="countdown font-mono text-4xl">
+                <span style={getValueStyle(item.val)}></span>
+              </span>
+              {item.label}
+            </div>
+          ))}
         </div>
 
         <DialogFooter className="justify-start">
