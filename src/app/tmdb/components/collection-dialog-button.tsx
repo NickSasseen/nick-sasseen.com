@@ -20,7 +20,6 @@ const CollectionDialogButton = ({ collectionId }) => {
   const { loading, collection } = useCollection(collectionId);
 
   if (loading) return;
-  console.log(collection);
 
   const { name, backdrop_path, poster_path, overview, parts } = collection;
 

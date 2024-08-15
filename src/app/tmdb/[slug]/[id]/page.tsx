@@ -72,7 +72,6 @@ const Details = async ({ params: { slug, id } }) => {
     first_air_date,
     number_of_seasons,
   } = details;
-  console.log(cast);
 
   const releaseYr = (release_date as string)?.split("-")[0];
   const firstAirYr = (first_air_date as string)?.split("-")[0];

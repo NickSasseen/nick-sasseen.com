@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/dialog";
 
 import React, { useState } from "react";
-import useCastMember from "../hooks/useCastMember";
-import { Film, Info, LibrarySquare, Text, UserSquare } from "lucide-react";
+import { Clapperboard, Popcorn, Text, TvMinimal, UserSquare } from "lucide-react";
 import InfoCard from "./info-card";
 import { DaisyCarousel, DaisyCarouselItem } from "@/components/daisy/carousel";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import usePerson from "../hooks/usePerson";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import TMDBApi from "../api";
 
 const CastMemberDialogCard = ({ id, name, character }) => {
   const { loading, person } = usePerson(id);
@@ -25,7 +27,12 @@ const CastMemberDialogCard = ({ id, name, character }) => {
 
   if (loading) return;
 
-  const { biography, profile_path } = person;
+  const {
+    biography,
+    profile_path,
+    movie_credits: { cast: movies },
+    tv_credits: { cast: tv_shows },
+  } = person;
   console.log(person);
 
   let personalInfo = [
@@ -95,6 +102,36 @@ const CastMemberDialogCard = ({ id, name, character }) => {
             </div>
           </div>
         </InfoCard>
+
+        {(movies || tv_shows) && (
+          <InfoCard title="Credits" icon={<Clapperboard />}>
+            <Tabs defaultValue="movies" className="w-full">
+              <TabsList className="w-full">
+                {movies && (
+                  <TabsTrigger className="flex-1 space-x-2" value="movies">
+                    <span>Movies</span>
+                    <Popcorn className="w-4" />
+                    <Badge variant="outline">{movies.length}</Badge>
+                  </TabsTrigger>
+                )}
+                {tv_shows && (
+                  <TabsTrigger className="flex-1 space-x-2" value="tv">
+                    <span>TV Shows</span>
+                    <TvMinimal className="w-4" />
+                    <Badge variant="outline">{tv_shows.length}</Badge>
+                  </TabsTrigger>
+                )}
+              </TabsList>
+
+              <TabsContent value="movies">
+                <CarouselCard results={movies} />
+              </TabsContent>
+              <TabsContent value="tv">
+                <CarouselCard results={tv_shows} />
+              </TabsContent>
+            </Tabs>
+          </InfoCard>
+        )}
         {/* 
         <InfoCard title="Movies" icon={<Film />}>
           <DaisyCarousel>
@@ -123,6 +160,28 @@ const CastMemberDialogCard = ({ id, name, character }) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+};
+
+const CarouselCard = ({ results }) => {
+  return (
+    <DaisyCarousel>
+      {results.map((item) => (
+        <DaisyCarouselItem key={item.id} className="basis-32 sm:basis-6">
+          <Link href={`/tmdb/${item.title ? "movie" : "tv"}/${item.id}`}>
+            <Card className="rounded-lg">
+              <CardContent className="p-0">
+                <img
+                  className="rounded-lg"
+                  src={TMDBApi.GetPosterImage(item.poster_path)}
+                  alt={item.title ?? item.name}
+                />
+              </CardContent>
+            </Card>
+          </Link>
+        </DaisyCarouselItem>
+      ))}
+    </DaisyCarousel>
   );
 };
 
