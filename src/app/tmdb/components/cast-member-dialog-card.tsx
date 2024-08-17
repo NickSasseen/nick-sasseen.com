@@ -25,7 +25,7 @@ const CastMemberDialogCard = ({ id, name, character }) => {
   const { loading, person } = usePerson(id);
   const [showAll, setShowAll] = useState(false);
 
-  if (loading) return;
+  if (loading || !person) return;
 
   const {
     biography,
@@ -104,33 +104,35 @@ const CastMemberDialogCard = ({ id, name, character }) => {
         </InfoCard>
 
         {(movies || tv_shows) && (
-          <InfoCard title="Credits" icon={<Clapperboard />}>
-            <Tabs defaultValue="movies" className="w-full">
-              <TabsList className="w-full">
-                {movies && (
-                  <TabsTrigger className="flex-1 space-x-2" value="movies">
-                    <span>Movies</span>
-                    <Popcorn className="w-4" />
-                    <Badge variant="outline">{movies.length}</Badge>
-                  </TabsTrigger>
-                )}
-                {tv_shows && (
-                  <TabsTrigger className="flex-1 space-x-2" value="tv">
-                    <span>TV Shows</span>
-                    <TvMinimal className="w-4" />
-                    <Badge variant="outline">{tv_shows.length}</Badge>
-                  </TabsTrigger>
-                )}
-              </TabsList>
+          <div className="max-w-sm">
+            <InfoCard title="Credits" icon={<Clapperboard />}>
+              <Tabs defaultValue="movies" className="w-full">
+                <TabsList className="w-full">
+                  {movies && (
+                    <TabsTrigger className="flex-1 space-x-2" value="movies">
+                      <span>Movies</span>
+                      <Popcorn className="w-4" />
+                      <Badge variant="outline">{movies.length}</Badge>
+                    </TabsTrigger>
+                  )}
+                  {tv_shows && (
+                    <TabsTrigger className="flex-1 space-x-2" value="tv">
+                      <span>TV Shows</span>
+                      <TvMinimal className="w-4" />
+                      <Badge variant="outline">{tv_shows.length}</Badge>
+                    </TabsTrigger>
+                  )}
+                </TabsList>
 
-              <TabsContent value="movies">
-                <CarouselCard results={movies} />
-              </TabsContent>
-              <TabsContent value="tv">
-                <CarouselCard results={tv_shows} />
-              </TabsContent>
-            </Tabs>
-          </InfoCard>
+                <TabsContent value="movies">
+                  <CarouselCard results={movies} />
+                </TabsContent>
+                <TabsContent value="tv">
+                  <CarouselCard results={tv_shows} />
+                </TabsContent>
+              </Tabs>
+            </InfoCard>
+          </div>
         )}
         {/* 
         <InfoCard title="Movies" icon={<Film />}>
