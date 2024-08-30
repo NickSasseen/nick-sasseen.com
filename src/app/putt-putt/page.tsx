@@ -47,8 +47,8 @@ const PuttPutt = () => {
       </div>
 
       <div className="grid grid-cols-2">
-        {Object.keys(players).map((p) => (
-          <div className="text-center m-4">
+        {Object.keys(players).map((p, i) => (
+          <div key={i} className="text-center m-4">
             <h2 className="uppercase text-2xl font-bold">{p}</h2>
 
             <div className="flex justify-center h-16 mb-2">
