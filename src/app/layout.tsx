@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Heart, Home, LandPlotIcon, Tv } from "lucide-react";
 import MobileToolbar from "@/components/mobile-toolbar";
 import { Toaster } from "@/components/ui/toaster";
+import { Viewport } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,12 @@ export const menuItems: MenuItem[] = [
     mobileOnly: true,
   },
 ];
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  width: "device-width",
+  maximumScale: 1,
+};
 
 export default function RootLayout({
   children,
