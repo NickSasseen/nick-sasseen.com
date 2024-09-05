@@ -155,8 +155,8 @@ function LuckyJack() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-center">Symbol</TableHead>
-                    <TableHead>3 Card Jackpot</TableHead>
-                    <TableHead>4 Card Jackpot</TableHead>
+                    <TableHead className="text-center">3 Card Jackpot</TableHead>
+                    <TableHead className="text-center">4 Card Jackpot</TableHead>
                   </TableRow>
                 </TableHeader>
 
