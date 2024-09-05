@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
-import { Heart, Home, LandPlotIcon, Tv } from "lucide-react";
+import { Dices, Heart, Home, LandPlotIcon, Tv } from "lucide-react";
 import MobileToolbar from "@/components/mobile-toolbar";
 import { Toaster } from "@/components/ui/toaster";
 import { Viewport } from "next";
@@ -32,6 +32,7 @@ export const menuItems: MenuItem[] = [
     icon: <LandPlotIcon />,
     mobileOnly: true,
   },
+  { text: "Lucky Jack", href: "/lucky-jack", icon: <Dices />, mobileOnly: true },
 ];
 
 export const viewport: Viewport = {
@@ -53,7 +54,7 @@ export default function RootLayout({
             {/* Small and above */}
             <Sidenav />
 
-            <div className="flex flex-col sm:gap-4 sm:pt-4 sm:pl-14">
+            <div className="flex flex-col flex-1 sm:gap-4 sm:pt-4 sm:pl-14">
               <MobileToolbar />
               {children}
             </div>
