@@ -118,16 +118,6 @@ function LuckyJack() {
 
   return (
     <div className="flex flex-col flex-1 p-4 space-y-4">
-      <div className="flex items-center justify-center space-x-2">
-        <CrownIcon className="text-green-200" />
-        <CloverIcon className="text-green-800" />
-        <BellIcon className="text-yellow-500" />
-        <h1 className="text-3xl font-bold">Lucky Jack</h1>
-        <GrapeIcon className="text-red-400" />
-        <CherryIcon className="text-red-800" />
-        <CitrusIcon className="text-yellow-300" />
-      </div>
-
       <div className="grid grid-cols-2 flex-1 items-start">
         {Object.keys(players).map((playerName) => (
           <AlertDialog

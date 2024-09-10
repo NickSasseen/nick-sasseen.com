@@ -26,13 +26,7 @@ export interface MenuItem {
 export const menuItems: MenuItem[] = [
   { text: "Home", href: "/", icon: <Home /> },
   { text: "TMDB", href: "/tmdb", icon: <Tv /> },
-  {
-    text: "Putt Putt",
-    href: "/putt-putt",
-    icon: <LandPlotIcon />,
-    mobileOnly: true,
-  },
-  { text: "Lucky Jack", href: "/lucky-jack", icon: <Dices />, mobileOnly: true },
+  { text: "Games", href: "/games", icon: <Dices />, mobileOnly: true },
 ];
 
 export const viewport: Viewport = {
