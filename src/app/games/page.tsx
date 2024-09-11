@@ -18,7 +18,7 @@ import {
   LandPlotIcon,
   TrophyIcon,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LuckyJack from "./lucky-jack/lucky-jack";
 import PuttPutt from "./putt-putt/putt-putt";
 
