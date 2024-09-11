@@ -2,12 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { LOCAL_STORAGE } from "@/shared/local-storage";
 import { Minus, Plus, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
-
-enum LocalStorageOptions {
-  Players = "players",
-}
 
 enum Actions {
   AddPlayer,
@@ -21,7 +18,7 @@ const PuttPutt = () => {
   const [newPlayerName, setNewPlayerName] = useState("");
 
   useEffect(() => {
-    const storage = localStorage.getItem(LocalStorageOptions.Players);
+    const storage = localStorage.getItem(LOCAL_STORAGE.PuttPutt);
     if (storage) {
       setPlayers(JSON.parse(storage));
     }
@@ -70,9 +67,9 @@ const PuttPutt = () => {
           break;
       }
 
-      action === Actions.Reset && localStorage.removeItem(LocalStorageOptions.Players);
+      action === Actions.Reset && localStorage.removeItem(LOCAL_STORAGE.PuttPutt);
       action !== Actions.Reset &&
-        localStorage.setItem(LocalStorageOptions.Players, JSON.stringify(newValue));
+        localStorage.setItem(LOCAL_STORAGE.PuttPutt, JSON.stringify(newValue));
 
       return newValue;
     });

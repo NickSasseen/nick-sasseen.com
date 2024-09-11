@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -22,7 +23,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { LOCAL_STORAGE } from "@/shared/local-storage";
-import { BellIcon, CherryIcon, CitrusIcon, CloverIcon, CrownIcon, GrapeIcon } from "lucide-react";
+import {
+  BellIcon,
+  CherryIcon,
+  CitrusIcon,
+  CloverIcon,
+  CrownIcon,
+  GrapeIcon,
+  User,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const Symbols = {
@@ -84,6 +93,7 @@ const DEFAULT_PLAYERS = {
 
 function LuckyJack() {
   const [open, setOpen] = useState(false);
+  const [newPlayerName, setNewPlayerName] = useState("");
   const [current, setCurrent] = useState("");
   const [players, setPlayers] = useState<{ [name: string]: number }>(DEFAULT_PLAYERS);
 
@@ -98,6 +108,26 @@ function LuckyJack() {
       localStorage.setItem(LOCAL_STORAGE.LuckyJack, JSON.stringify(players));
     }
   }, [players]);
+
+  const addPlayer = () => {
+    if (newPlayerName) {
+      // add new player
+      setPlayers((prev) => ({
+        ...prev,
+        [newPlayerName]: 0,
+      }));
+      // clear input
+      setNewPlayerName("");
+    }
+  };
+
+  const removePlayer = () => {
+    if (current) {
+      const copy = players;
+      delete copy[current];
+      setPlayers(copy);
+    }
+  };
 
   const addPointsToCurrentPlayer = (pts: number) => {
     setPlayers((prev) => ({
@@ -117,7 +147,25 @@ function LuckyJack() {
   };
 
   return (
-    <div className="flex flex-col flex-1 p-4 space-y-4">
+    <div className="flex flex-col flex-1 space-y-4">
+      <form
+        className="flex w-full items-center space-x-2 px-2 my-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          setNewPlayerName(e.currentTarget.value);
+        }}
+      >
+        <Input
+          value={newPlayerName}
+          onChange={(e) => setNewPlayerName(e.target.value)}
+          placeholder="Enter a name"
+        />
+        <Button className="flex space-x-2" size="sm" onClick={() => addPlayer()}>
+          <User />
+          <span>Add Player</span>
+        </Button>
+      </form>
+
       <div className="grid grid-cols-2 flex-1 items-start">
         {Object.keys(players).map((playerName) => (
           <AlertDialog
@@ -180,6 +228,9 @@ function LuckyJack() {
               </Table>
               <AlertDialogDescription></AlertDialogDescription>
               <AlertDialogFooter>
+                <AlertDialogCancel className="bg-destructive" onClick={() => removePlayer()}>
+                  Remove player...
+                </AlertDialogCancel>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
               </AlertDialogFooter>
             </AlertDialogContent>
